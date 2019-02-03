@@ -1,10 +1,15 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { UsersController } from './users/users.controller';
 
 @Module({
   imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [UsersController],
+  providers: [{
+    provide: 'Config',
+    useFactory: () => ({
+      app: '1.0.0.14322'
+    })
+  }],
+  exports: ['Config']
 })
 export class AppModule {}
