@@ -1,43 +1,19 @@
-import { Controller, Get, Param, Inject } from '@nestjs/common';
-import { getPackedSettings } from 'http2';
-
-interface User {
-  id: number,
-  name: string,
-}
-
-const userSource: User[] = [];
-
-for (let index = 0; index < 30; index++) {
-  userSource.push({
-    id: index,
-    name: `User ${index}`
-  })
-}
+import { Controller, Get, Post, Body } from '@nestjs/common';
+import { UsersService } from './users.service';
+import { User } from './user.model';
+import { UserDto } from './user.dto';
 
 @Controller('v1/users')
 export class UsersController {
-  private readonly users: User[] = userSource; 
-
-  constructor(@Inject('Config') private readonly config: any) {}
+  constructor(private readonly userService: UsersService) {}
 
   @Get()
-  getAll() {
-    return this.users;
+  async getAll(): Promise<User[]> {
+    return this.userService.getAll();
   }
 
-  @Get('config')
-  getConfig() {
-    return this.config;
-  }
-
-  @Get('settings')
-  getSettings() {
-    return 'ok';
-  }
-  
-  @Get(':id')
-  getById(@Param('id') id: number) {
-    return this.users.find(u => u.id == id);
+  @Post()
+  async addUser(@Body() user: UserDto): Promise<User> {
+    return this.userService.addUser(user);
   }
 }

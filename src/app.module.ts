@@ -1,15 +1,18 @@
 import { Module } from '@nestjs/common';
-import { UsersController } from './users/users.controller';
+import { MongooseModule } from "@nestjs/mongoose";
+import { UserModule } from './users/user.module';
+import { config } from './config';
 
 @Module({
-  imports: [],
-  controllers: [UsersController],
-  providers: [{
-    provide: 'Config',
-    useFactory: () => ({
-      app: '1.0.0.14322'
-    })
-  }],
-  exports: ['Config']
+  imports: [
+    MongooseModule.forRootAsync({
+      useFactory: () => ({
+        uri: config.MONGO_URL,
+        useNewUrlParser: true
+      })
+    }),
+    UserModule
+  ],
+  providers: [],
 })
 export class AppModule {}
