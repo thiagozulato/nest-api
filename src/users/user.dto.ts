@@ -1,6 +1,8 @@
 export interface UserDto {
-  name?: string,
-  document?: string,
-  age?: number,
-  password?: string,
+  name: string,
+  email: string,
+  document: string,
+  age: number,
+  password: string,
+  active: boolean
 }
