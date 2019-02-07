@@ -1,0 +1,27 @@
+type User {
+  _id: String!
+  name: String
+  email: String
+  document: String
+  age: Int
+  password: String
+  active: Boolean
+}
+
+input InputUser {
+  name: String
+  email: String
+  document: String
+  age: Int
+  password: String
+  active: Boolean
+}
+
+type Query {
+  users: [User]
+  user(id: String): User
+}
+
+type Mutation {
+  createUser(user: InputUser): User
+}

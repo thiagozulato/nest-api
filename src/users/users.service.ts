@@ -3,11 +3,11 @@ import { Model } from 'mongoose';
 import { User } from './user.model';
 import { UserDto } from './user.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { IUserSchema } from './user.schema';
+import { QueryDto } from './query.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel('User') private readonly userModel: Model<User, IUserSchema>) {}
+  constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
 
   async getAll(): Promise<User[]> {
     return await this.userModel.find({}).select({ password: false }).exec();
@@ -19,6 +19,10 @@ export class UsersService {
 
   async getUserByEmail(email: string): Promise<User> {
     return await this.userModel.findOne({ email }).exec();
+  }
+
+  async customQuery(query: QueryDto): Promise<User[]> {
+    return await this.userModel.find(query.terms, query.fields).exec();
   }
 
   async addUser(user: UserDto): Promise<User> {
